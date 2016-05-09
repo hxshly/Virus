@@ -29,19 +29,30 @@ using namespace PRendering;
 using namespace PSerialization;
 using namespace PSamplesCommon;
 using namespace Vectormath::Aos;
+using namespace PText;
 
 
 // Description:
 // The static sample application instance.
 static PhyreStarter s_phyreStarter;
 
+// The maximum length for the dynamic text string.
+#define PD_MAX_DYNAMIC_TEXT_LENGTH	(32)
+
 // Description:
 // The constructor for the PhyreStarter class.
 PhyreStarter::PhyreStarter()
 	: m_loadedCluster(NULL)
 	, m_camera(NULL)
+//	, m_bitmapFont(NULL)
 {
 	setWindowTitle("Basic Sample");
+
+	//for (PUInt32 i = 0; i < c_totalTextStrings; i++)
+	//{
+	//	m_text[i] = NULL;
+	//	m_textMaterial[i] = NULL;
+	//}
 
 	// Register the required utilities
 	PUtility::RegisterUtility(PScene::s_utilityScene);
@@ -114,6 +125,41 @@ PResult PhyreStarter::exitApplication()
 // PE_RESULT_NO_ERROR - The scene initialization succeeded.
 PResult PhyreStarter::initScene()
 {
+
+	//----------ATTEMPT AT FONT----------//
+	// Search for the font object in the loaded cluster
+	//m_bitmapFont = FindAssetRefObj<PBitmapFont>(NULL, "Fonts/Space.fgen");
+	//if (!m_bitmapFont)
+	//	return PHYRE_SET_LAST_ERROR(PE_RESULT_OBJECT_NOT_FOUND, "Unable to find bitmap font object in cluster");
+
+	//const PMaterial *textShader = FindAssetRefObj<PMaterial>(NULL, "Shaders/PhyreText");
+	//if (!textShader)
+	//	return PHYRE_SET_LAST_ERROR(PE_RESULT_OBJECT_NOT_FOUND, "Unable to find text shader in cluster");
+
+	//// Create the text and text materials
+	//for (PUInt32 i = 0; i < c_totalTextStrings; i++)
+	//	PHYRE_TRY(PUtilityText::CreateText(*m_bitmapFont, *m_loadedCluster, *textShader, m_text[i], m_textMaterial[i], PUtilityText::PE_TEXT_RENDER_TECHNIQUE_ALPHA_BLEND));
+
+	//// Configure text 2
+	//if (m_text[0])
+	//{
+	//	PMatrix4 matrix = PMatrix4::identity();
+	//	float viewportScale = (float)getWidth() / (float)getHeight();
+
+	//	// Since the text will be updated dynamically, we want to make sure that there should be no stalls due
+	//	// to allocating memory or waiting for existing memory for geometry to become available.
+	//	PHYRE_TRY(m_text[0]->setBufferCount(2));
+	//	PHYRE_TRY(m_text[0]->setTextLength(PD_MAX_DYNAMIC_TEXT_LENGTH));
+
+	//	// Position the text in the bottom left corner
+	//	float scale = 1.0f / (12 * m_textMaterial[0]->getBitmapFontSize());
+
+	//	matrix.setUpper3x3(Vectormath::Aos::Matrix3::scale(Vectormath::Aos::Vector3(scale, scale, 1.0f)));
+	//	matrix.setTranslation(Vectormath::Aos::Vector3((-1.0f * viewportScale), -0.98f, 1.0f));
+	//	m_text[0]->setMatrix(matrix);
+	//}
+	//----------END OF FONT ATTEMPT----------//
+
 	// Look for a camera in the asset, otherwise refer to a default camera
 	m_camera = FindFirstInstanceInCluster<PCameraPerspective>(*m_loadedCluster);
 	if(!m_camera)
@@ -130,9 +176,35 @@ PResult PhyreStarter::initScene()
 	PHYRE_TRY(m_cameraController.bind(*m_camera));
 
 	// User INterface
+	//if (m_text[0] && m_textMaterial[0])
+	//{
+		// Configure the text 2 string and its position
 
-	char message_text[32] = "Time Left: ";
-	m_text[TEXT_ACTION] = UIManager::GetInstance().AddScreenText(message_text[0], 0.45, 0.15, Vector3(1.0f, 0.5f, 0.0f), 1.0f);
+		//		if (!QueryPerformanceFrequency(&i))
+		//		return false;
+		frequencyPerSecond = (float)(i.QuadPart);
+		QueryPerformanceCounter(&i);
+		start = i.QuadPart;
+		elapsedGameTime = 0;
+
+		elapsedGameTime = (float)(i.QuadPart - start) / frequencyPerSecond;
+
+		start = i.QuadPart;
+		timeLeft -= elapsedGameTime;
+
+		//float currentDistance = m_cameraController.getDistance();
+		//if (currentDistance != m_previousDistance)
+		//{
+		PChar distanceString[PD_MAX_DYNAMIC_TEXT_LENGTH];
+		PHYRE_SNPRINTF(distanceString, PHYRE_STATIC_ARRAY_SIZE(distanceString), "TimeLeft: %.0f", timeLeft);
+		//PHYRE_TRY(m_text[0]->setText(distanceString));
+		m_text[TEXT_ACTION] = UIManager::GetInstance().AddScreenText(distanceString[0], 0.45, 0.15, Vector3(1.0f, 0.5f, 0.0f), 1.0f);
+		// Update the previous distance
+		//m_previousDistance = currentDistance;
+		//}
+	//}
+	//char message_text[32] = "Time Left: ";
+	//m_text[TEXT_ACTION] = UIManager::GetInstance().AddScreenText(message_text[0], 0.45, 0.15, Vector3(1.0f, 0.5f, 0.0f), 1.0f);
 	
 	//attempt at timer
 	
@@ -155,6 +227,15 @@ PResult PhyreStarter::exitScene()
 
 	if(m_camera)
 		m_cameraController.unbind(*m_camera);
+
+	// Free the text objects and text materials
+	//for (PUInt32 i = 0; i < c_totalTextStrings; i++)
+	//{
+	//	delete m_textMaterial[i];
+	//	m_textMaterial[i] = NULL;
+	//	delete m_text[i];
+	//	m_text[i] = NULL;
+	//}
 
 	delete pMan;
 
@@ -210,6 +291,13 @@ PResult PhyreStarter::render()
 	UIManager::GetInstance().Render(m_renderer, *m_camera); 
 	m_renderer.endScene();
 
+	
+	// Render the text objects
+	//for (PUInt32 i = 0; i < c_totalTextStrings; i++)
+	//{
+	//	if (m_text[i])
+	//		PHYRE_TRY(m_text[i]->renderText(m_renderer));
+	//}
 	//float timeLeft = 90;
 	//timeLeft = timeLeft - (float)m_elapsedTime;
 
@@ -295,8 +383,34 @@ PResult PhyreStarter::handleInputs()
 	//m_cameraController.lookAt(camFocusPos);
 	//m_camera->updateViewMatrices();
 
-	
+/*	if (m_text[0] && m_textMaterial[0])
+	{
+		// Configure the text 2 string and its position
 
+//		if (!QueryPerformanceFrequency(&i))
+	//		return false;
+		frequencyPerSecond = (float)(i.QuadPart);
+		QueryPerformanceCounter(&i);
+		start = i.QuadPart;
+		elapsedGameTime = 0;
+
+		elapsedGameTime = (float)(i.QuadPart - start) / frequencyPerSecond;
+
+		start = i.QuadPart;
+		timeLeft -= elapsedGameTime;
+
+		//float currentDistance = m_cameraController.getDistance();
+		//if (currentDistance != m_previousDistance)
+		//{
+			PChar distanceString[PD_MAX_DYNAMIC_TEXT_LENGTH];
+			PHYRE_SNPRINTF(distanceString, PHYRE_STATIC_ARRAY_SIZE(distanceString), "TimeLeft: %.0f", timeLeft);
+			PHYRE_TRY(m_text[0]->setText(distanceString));
+
+			// Update the previous distance
+			//m_previousDistance = currentDistance;
+		//}
+	}
+*/
 	return PApplication::handleInputs();
 }
 PResult PhyreStarter::animate() 

@@ -41,6 +41,10 @@ protected:
 
 	Phyre::PWorldMatrixOrbitController	m_cameraController; // The camera controller for this sample.
 	
+	LARGE_INTEGER i;
+	float frequencyPerSecond = 0;
+	float elapsedGameTime;
+	LONGLONG start;
 	int m_text[TEXT_TOTAL];
 	int timeLeft = 60;
 	PlayerManager* pMan;
