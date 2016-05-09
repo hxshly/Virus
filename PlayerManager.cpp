@@ -26,10 +26,6 @@ void PlayerManager::updatePlayers()
 
 	Phyre::PFramework::PApplication* pApp = Phyre::PFramework::PApplication::GetApplication();
 
-	int Xdir = 0;
-	int Ydir = 1;
-	int Zdir = 2;
-
 
 	for (int i = 0; i < playerList.size(); i++)
 	{
