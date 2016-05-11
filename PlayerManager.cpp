@@ -25,7 +25,7 @@ void PlayerManager::updatePlayers()
 {
 
 	Phyre::PFramework::PApplication* pApp = Phyre::PFramework::PApplication::GetApplication();
-
+	bool collidedWithVirus;
 
 	for (int i = 0; i < playerList.size(); i++)
 	{
@@ -55,9 +55,13 @@ void PlayerManager::updatePlayers()
 			}
 	
 
-		if (checkCollision(*playerList.at(i)))
+		if (checkCollision(*playerList.at(i), collidedWithVirus))
 			{
 				playerList.at(i)->setPosition(oldPosition);
+				/*if (collidedWithVirus)
+				{
+					playerList.at(i)->setVirusStatus(true);
+				}*/
 			}
 
 
@@ -70,30 +74,45 @@ void PlayerManager::updatePlayers()
 
 }
 
-bool PlayerManager::checkCollision(Player &player)
+bool PlayerManager::checkCollision(Player &player, bool &collidedWithVirus)
 {
-	bool collided = false;
+	//Description:
+	//Takes in a pointer to a player.
+	//Checks against every player other than itself
+	//and if the distance between them is less than 200 units, it checks if they have collided via AABB
+
 	float distanceBetween;
 	Vector3 vectorBetween;
 
 	for (int i = 0; i < playerList.size(); i++)
 	{
+		//checks all players other than itself
 		if (playerList.at(i)->getPNumber() != player.getPNumber())   
 		{
 			vectorBetween = playerList.at(i)->getPosition() - player.getPosition();
 			distanceBetween = getDistanceBetween(vectorBetween);
-
-			if (distanceBetween < 200)
+			
+			//Only checks to see if collided if they are closer than 200 units
+			if (distanceBetween < 200)	
 			{
-				return (player.minX() <= playerList.at(i)->maxX() && player.maxX() >= playerList.at(i)->minX()) &&
-					   (player.minY() <= playerList.at(i)->maxY() && player.maxY() >= playerList.at(i)->minY()) &&
-					   (player.minZ() <= playerList.at(i)->maxZ() && player.maxZ() >= playerList.at(i)->minZ());
+				//checks to see if they have collided, if they have flip the virus status and return true
+				if ((player.minX() <= playerList.at(i)->maxX() && player.maxX() >= playerList.at(i)->minX()) &&
+					(player.minY() <= playerList.at(i)->maxY() && player.maxY() >= playerList.at(i)->minY()) &&
+					(player.minZ() <= playerList.at(i)->maxZ() && player.maxZ() >= playerList.at(i)->minZ()))
+						{
+							//If the virus status is not the same (both not virus) flip the virus status
+							if (!player.checkVirus() == playerList.at(i)->checkVirus())
+								{	
+									player.flipVirus();
+									playerList.at(i)->flipVirus();
+								}
+							return true;
+						} ;
 			}
-			
-			
+				
 		}
 	}
-	return collided;
+	return false;
 
 }
 

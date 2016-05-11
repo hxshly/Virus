@@ -34,6 +34,7 @@ public:
 	void decYPos(float newY) { position.setY(position.getY() - newY); };
 	void decZPos(float newZ) { position.setZ(position.getZ() - newZ); };
 
+	void flipVirus()	{ isVirus = !isVirus; };
 
 	//Getter functions
 	std::string getName()	{ return playerName; };
@@ -71,4 +72,3 @@ private:
 	int incVal = 5;
 	int decVal = 5;
 };
-
