@@ -40,11 +40,18 @@ public:
 	bool checkVirus()		{ return isVirus; };
 	int getScore()			{ return score; };
 	int getPNumber()		{ return playerNumber; };
-	Vector3 getPosition()	{ return position; };
 	float getXPos()			{ return position.getX(); };
 	float getYPos()			{ return position.getY(); };
 	float getZPos()			{ return position.getZ(); };
 	float getThePos(int pos);
+	float minX()			{ return (getXPos() - 50.0f); };
+	float maxX()			{ return (getXPos() + 50.0f); };
+	float minY()			{ return (getYPos() - 50.0f); };
+	float maxY()			{ return (getYPos() + 50.0f); };
+	float minZ()			{ return (getZPos() - 50.0f); };
+	float maxZ()			{ return (getZPos() + 50.0f); };
+
+	Vector3 getPosition()	{ return position; };
 	Vector3 getRotation()	{ return rotation; };
 
 private:

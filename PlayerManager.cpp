@@ -80,63 +80,20 @@ bool PlayerManager::checkCollision(Player &player)
 	{
 		if (playerList.at(i)->getPNumber() != player.getPNumber())   
 		{
-			int leftA, leftB;
-			int rightA, rightB;
-			int topA, topB;
-			int bottomA, bottomB;
+			vectorBetween = playerList.at(i)->getPosition() - player.getPosition();
+			distanceBetween = getDistanceBetween(vectorBetween);
 
-			//Calculate the sides of player 1 
-			leftA = player.getXPos() - 50;
-			rightA = player.getXPos() + 50;
-			topA = player.getZPos() + 50;
-			bottomA = player.getZPos() - 50;
-
-
-			//Calculate the sides of player 2 
-			leftB = playerList.at(i)->getXPos() - 50;
-			rightB = playerList.at(i)->getXPos() + 50;
-			topB = playerList.at(i)->getZPos() + 50;
-			bottomB = playerList.at(i)->getZPos() - 50;
-
-
-			//If any of the sides from 1 are outside of 2
-			if (bottomA <= topB)
+			if (distanceBetween < 200)
 			{
-				return false;
+				return (player.minX() <= playerList.at(i)->maxX() && player.maxX() >= playerList.at(i)->minX()) &&
+					   (player.minY() <= playerList.at(i)->maxY() && player.maxY() >= playerList.at(i)->minY()) &&
+					   (player.minZ() <= playerList.at(i)->maxZ() && player.maxZ() >= playerList.at(i)->minZ());
 			}
-
-			if (topA >= bottomB)
-			{
-				return false;
-			}
-
-			if (rightA <= leftB)
-			{
-				return false;
-			}
-
-			if (leftA >= rightB)
-			{
-				return false;
-			}
-
-			//If none of the sides from A are outside B
-			return true;
+			
+			
 		}
-
-
-
-
-			//vectorBetween = playerList.at(i)->getPosition() - player.getPosition();
-			//distanceBetween = getDistanceBetween(vectorBetween);
-
-			//if (distanceBetween <= 125)
-			//{
-			//	collided = true;
-			//	return collided;
-			//}
-		
 	}
+	return collided;
 
 }
 
