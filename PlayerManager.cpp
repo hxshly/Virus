@@ -1,31 +1,39 @@
 #include "PlayerManager.h"
+#include <time.h>
+#include <stdlib.h>
 
 
 PlayerManager::PlayerManager()
+	: maxPlayers (0)
 {
-	maxPlayers = 0;
-
+	
 }
 
 void PlayerManager::initPlayers(Phyre::PCluster* destCluster, int playerCount)
 {
 	maxPlayers = playerCount;
+	int ranVir = rand() % playerCount + 1;
+	srand(time(NULL));
+	bool isVirus = false;
+	
 
-		for (int i = 0; i < playerCount; i++)
-	{
-		int playerNum = i;
-		Player* newP = new Player(playerNum, false, destCluster);
-		playerList.push_back(newP);
-		playerList.at(i)->updateWorldMatrix(playerList.at(i)->getRotation().getZ(), playerList.at(i)->getPosition());
-	}
+	for (int i = 0; i < playerCount; i++)
+		{
+			if (i == ranVir)
+			{
+				isVirus = true;
+			}
+			int playerNum = i;
+			Player* newP = new Player(playerNum, isVirus, destCluster);
+			playerList.push_back(newP);
+			playerList.at(i)->updateWorldMatrix(playerList.at(i)->getRotation().getZ(), playerList.at(i)->getPosition());
+		}
 }
 
 
 void PlayerManager::updatePlayers()
 {
-
 	Phyre::PFramework::PApplication* pApp = Phyre::PFramework::PApplication::GetApplication();
-	bool collidedWithVirus;
 
 	for (int i = 0; i < playerList.size(); i++)
 	{
@@ -55,18 +63,11 @@ void PlayerManager::updatePlayers()
 			}
 	
 
-		if (checkCollision(*playerList.at(i), collidedWithVirus))
+		if (checkCollision(*playerList.at(i)))
 			{
 				playerList.at(i)->setPosition(oldPosition);
-				/*if (collidedWithVirus)
-				{
-					playerList.at(i)->setVirusStatus(true);
-				}*/
 			}
-
-
-
-
+			
 		playerList.at(i)->updateWorldMatrix(playerList.at(i)->getRotation().getZ(), playerList.at(i)->getPosition());
 	}
 
@@ -74,7 +75,7 @@ void PlayerManager::updatePlayers()
 
 }
 
-bool PlayerManager::checkCollision(Player &player, bool &collidedWithVirus)
+bool PlayerManager::checkCollision(Player &player)
 {
 	//Description:
 	//Takes in a pointer to a player.

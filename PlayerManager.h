@@ -21,7 +21,7 @@ public:
 
 	void initPlayers(Phyre::PCluster* destCluster, int playerCount);
 	void updatePlayers();
-	bool checkCollision(Player &player, bool &collidedWithVirus);
+	bool checkCollision(Player &player);
 	float getDistanceBetween(Vector3 vectorBetween);
 
 private:
