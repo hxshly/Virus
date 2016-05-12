@@ -12,13 +12,13 @@ PlayerManager::PlayerManager()
 void PlayerManager::initPlayers(Phyre::PCluster* destCluster, int playerCount)
 {
 	maxPlayers = playerCount;
-	int ranVir = rand() % playerCount + 1;
 	srand(time(NULL));
-	bool isVirus = false;
+	int ranVir = rand() % (playerCount);
 	
 
 	for (int i = 0; i < playerCount; i++)
 		{
+			bool isVirus = false;
 			if (i == ranVir)
 			{
 				isVirus = true;
@@ -61,13 +61,34 @@ void PlayerManager::updatePlayers()
 			{
 				playerList.at(i)->decZPos(20);
 			}
-	
 
+		playerList.at(i)->countdownInvuln();
+	
+		//Check collision and if colided move the player to the position it was before collision
 		if (checkCollision(*playerList.at(i)))
 			{
 				playerList.at(i)->setPosition(oldPosition);
 			}
-			
+		
+
+		/////////////////////////////////////////////////////////////////////////////
+		//--------------Swap meshes if colliding with virus------------------------//
+		/////////////////////////////////////////////////////////////////////////////
+
+		//if the player is the virus, change the mesh to virus.
+		if (playerList.at(i)->checkVirus())
+		{
+			playerList.at(i)->changeMeshToVirusMesh();
+		}
+		//else if it isnt the virus, change the mesh to the player mesh
+		else if (!playerList.at(i)->checkVirus())
+		{
+			playerList.at(i)->changeMeshToPlayerMesh();
+		}
+		
+
+
+		//update the world matrix of player
 		playerList.at(i)->updateWorldMatrix(playerList.at(i)->getRotation().getZ(), playerList.at(i)->getPosition());
 	}
 
@@ -104,8 +125,19 @@ bool PlayerManager::checkCollision(Player &player)
 							//If the virus status is not the same (both not virus) flip the virus status
 							if (!player.checkVirus() == playerList.at(i)->checkVirus())
 								{	
+									if (!player.checkVirus() && player.getInvuln() <= 0)
+									{
 									player.flipVirus();
 									playerList.at(i)->flipVirus();
+									playerList.at(i)->resetInvuln();
+									}
+									else if (player.checkVirus() && playerList.at(i)->getInvuln() <= 0)
+									{
+										player.flipVirus();
+										player.resetInvuln();
+										playerList.at(i)->flipVirus();
+									}
+
 								}
 							return true;
 						} ;

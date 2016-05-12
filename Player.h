@@ -34,13 +34,21 @@ public:
 	void decYPos(float newY) { position.setY(position.getY() - newY); };
 	void decZPos(float newZ) { position.setZ(position.getZ() - newZ); };
 
+	void countdownInvuln()	{if (invuln > 0) {invuln -= 1; } };
+	void resetInvuln()	{ invuln = 180; };
+
 	void flipVirus()	{ isVirus = !isVirus; };
+
+	void changeMeshToPlayerMesh();
+	void changeMeshToVirusMesh();
+
 
 	//Getter functions
 	std::string getName()	{ return playerName; };
 	bool checkVirus()		{ return isVirus; };
 	int getScore()			{ return score; };
 	int getPNumber()		{ return playerNumber; };
+	int getInvuln()			{ return invuln; };
 	float getXPos()			{ return position.getX(); };
 	float getYPos()			{ return position.getY(); };
 	float getZPos()			{ return position.getZ(); };
@@ -54,6 +62,7 @@ public:
 
 	Vector3 getPosition()	{ return position; };
 	Vector3 getRotation()	{ return rotation; };
+	
 
 private:
 	//Fixed attributes
@@ -63,11 +72,15 @@ private:
 	//Mutable attributes
 	bool isVirus;
 	int score;
+	int invuln;
 	Vector3 position;
 	Vector3 rotation;
 
 	Phyre::PWorldMatrix* pWorldMat;
-	Phyre::PRendering::PMeshInstance* pMeshInstance;
+	Phyre::PWorldMatrix* pWorldMatVirus;
+	Phyre::PRendering::PMeshInstance* pMeshInstancePlayer;
+	Phyre::PRendering::PMeshInstance* pMeshInstanceVirus;
+
 
 	int incVal = 5;
 	int decVal = 5;
