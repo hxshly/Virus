@@ -17,11 +17,8 @@ Player::Player(int pNumber, bool isPVirus, Phyre::PCluster* destCluster)
 	isVirus = isPVirus;
 	score = 0;
 	invuln = 180;
-<<<<<<< HEAD
 	incVal = 1;
 	decVal = 1;
-=======
->>>>>>> 15fe089b97b98e1010b0935eee9d45e7aebb64da
 
 	switch (playerNumber)
 	{

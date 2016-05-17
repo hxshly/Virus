@@ -71,11 +71,7 @@ private:
 
 	//Mutable attributes
 	bool isVirus;
-<<<<<<< HEAD
 	float score;
-=======
-	int score;
->>>>>>> 15fe089b97b98e1010b0935eee9d45e7aebb64da
 	int invuln;
 	Vector3 position;
 	Vector3 rotation;
@@ -84,15 +80,8 @@ private:
 	Phyre::PWorldMatrix* pWorldMatVirus;
 	Phyre::PRendering::PMeshInstance* pMeshInstancePlayer;
 	Phyre::PRendering::PMeshInstance* pMeshInstanceVirus;
-<<<<<<< HEAD
-
-
+	
 	float incVal;
 	float decVal;
-=======
 
-
-	int incVal = 5;
-	int decVal = 5;
->>>>>>> 15fe089b97b98e1010b0935eee9d45e7aebb64da
 };
