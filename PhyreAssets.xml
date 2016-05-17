@@ -1,0 +1,16 @@
+<assets>
+  <node shared="true" db="../Media/Basic/basic">
+    <asset source="../Media/Levels/VirusEnvironment.plv"/>
+    <asset source="../Media/Models/ArenaBase.dae"/>
+    <asset source="../Media/Models/BackWall.dae"/>
+    <asset source="../Media/Models/MiddleConsoleUnit.dae"/>
+	  <asset source="../Media/Models/Railings.dae"/>
+	  <asset source="../Media/Models/StageFloor.dae"/>
+  	<asset source="../Media/Models/StageSupports.dae"/>
+    <asset source="../Media/Shaders/PhyreText.cgfx"/>
+    <asset source="../Media/Fonts/Space.fgen"/>
+    <asset source="../Media/Models/cube.dae"/>
+    <asset source="../Media/Models/infectedCube.dae"/>
+    <asset source="../Media/Models/GridTiles.dae"/>
+  </node>
+</assets> 
