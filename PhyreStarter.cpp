@@ -451,7 +451,7 @@ PResult PhyreStarter::handleInputs()
 	elapsedGameTime = PTimer::GetTime();//new
 
 	timeLeft -= elapsedGameTime/temp;//new
-	//temp = temp + 1;//new
+	temp = temp + 1;//new
 	PChar distanceString[PD_MAX_DYNAMIC_TEXT_LENGTH];//new
 	PHYRE_SNPRINTF(distanceString, PHYRE_STATIC_ARRAY_SIZE(distanceString), "TimeLeft: %.0f", timeLeft);//new
 	m_text[TEXT_TIME] = UIManager::GetInstance().UpdateText(0, *distanceString);//new

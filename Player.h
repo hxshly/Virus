@@ -17,7 +17,7 @@ public:
 	void setVirusStatus(bool status) { isVirus = status; };
 
 	void incremenetScore()	{ score += incVal/60; };
-	void decrementScore()	{ score -= decVal/30; };
+	void decrementScore()	{ score -= decVal/40; };
 
 	void setPosition(Vector3 newPos) { position = newPos; };
 	void setRotation(Vector3 newRot) { rotation = newRot; };
