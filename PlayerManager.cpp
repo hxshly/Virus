@@ -86,11 +86,14 @@ void PlayerManager::updatePlayers()
 			playerList.at(i)->changeMeshToPlayerMesh();
 		}
 		
+<<<<<<< HEAD
 		//----------score----------//new
 		if (!playerList.at(i)->checkVirus())
 		{
 			playerList.at(i)->incremenetScore();
 		}
+=======
+>>>>>>> 15fe089b97b98e1010b0935eee9d45e7aebb64da
 
 		else if ((playerList.at(i)->checkVirus()) && (playerList.at(i)->getScore() > 1))
 		{
