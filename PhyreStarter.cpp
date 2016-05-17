@@ -24,6 +24,7 @@ PhyreEngine(TM) Package 3.12.0.0
 #include "UIManager.h"
 
 using namespace Phyre;
+using namespace PAnimation;
 using namespace PFramework;
 using namespace PRendering;
 using namespace PSerialization;
@@ -182,7 +183,7 @@ PResult PhyreStarter::initScene()
 
 		//		if (!QueryPerformanceFrequency(&i))
 		//		return false;
-		frequencyPerSecond = (float)(i.QuadPart);
+		/*frequencyPerSecond = (float)(i.QuadPart);
 		QueryPerformanceCounter(&i);
 		start = i.QuadPart;
 		elapsedGameTime = 0;
@@ -190,18 +191,17 @@ PResult PhyreStarter::initScene()
 		elapsedGameTime = (float)(i.QuadPart - start) / frequencyPerSecond;
 
 		start = i.QuadPart;
-		timeLeft -= elapsedGameTime;
+		timeLeft -= elapsedGameTime;*/
 
-		//float currentDistance = m_cameraController.getDistance();
-		//if (currentDistance != m_previousDistance)
-		//{
+		//timeLeft -= PTimer::GetTime();
+		//PTimeController neo;
+		//neo.getTime();
+
 		PChar distanceString[PD_MAX_DYNAMIC_TEXT_LENGTH];
 		PHYRE_SNPRINTF(distanceString, PHYRE_STATIC_ARRAY_SIZE(distanceString), "TimeLeft: %.0f", timeLeft);
-		//PHYRE_TRY(m_text[0]->setText(distanceString));
-		m_text[TEXT_ACTION] = UIManager::GetInstance().AddScreenText(distanceString[0], 0.45, 0.15, Vector3(1.0f, 0.5f, 0.0f), 1.0f);
-		// Update the previous distance
-		//m_previousDistance = currentDistance;
-		//}
+		m_text[TEXT_TIME] = UIManager::GetInstance().AddScreenText(distanceString[0], 0.5, 0.1, Vector3(1.0f, 0.5f, 0.0f), 1.0f);
+
+		
 	//}
 	//char message_text[32] = "Time Left: ";
 	//m_text[TEXT_ACTION] = UIManager::GetInstance().AddScreenText(message_text[0], 0.45, 0.15, Vector3(1.0f, 0.5f, 0.0f), 1.0f);
@@ -210,7 +210,36 @@ PResult PhyreStarter::initScene()
 	
 
 
-	pMan->initPlayers(m_loadedCluster, 4);
+		pMan->initPlayers(m_loadedCluster, 4);
+
+
+		//new
+		for (int i = 0; i < 4; i++)
+		{
+			switch (i)
+			{
+			case 0:
+				PChar scoreStringP1[PD_MAX_DYNAMIC_TEXT_LENGTH];
+				PHYRE_SNPRINTF(scoreStringP1, PHYRE_STATIC_ARRAY_SIZE(scoreStringP1), "Score: %.0f", pMan->getScore(i));
+				m_text[TEXT_SCORE_P1] = UIManager::GetInstance().AddScreenText(scoreStringP1[0], 0.1, 0.1, Vector3(1.0f, 0.0f, 0.0f), 1.0f);
+				break;
+			case 1:
+				PChar scoreStringP2[PD_MAX_DYNAMIC_TEXT_LENGTH];
+				PHYRE_SNPRINTF(scoreStringP2, PHYRE_STATIC_ARRAY_SIZE(scoreStringP2), "Score: %.0f", pMan->getScore(i));
+				m_text[TEXT_SCORE_P2] = UIManager::GetInstance().AddScreenText(scoreStringP2[0], 0.1, 0.95, Vector3(0.0f, 0.0f, 1.0f), 1.0f);
+				break;
+			case 2:
+				PChar scoreStringP3[PD_MAX_DYNAMIC_TEXT_LENGTH];
+				PHYRE_SNPRINTF(scoreStringP3, PHYRE_STATIC_ARRAY_SIZE(scoreStringP3), "Score: %.0f", pMan->getScore(i));
+				m_text[TEXT_SCORE_P3] = UIManager::GetInstance().AddScreenText(scoreStringP3[0], 0.90, 0.1, Vector3(0.0f, 1.0f, 0.0f), 1.0f);
+				break;
+			case 3:
+				PChar scoreStringP4[PD_MAX_DYNAMIC_TEXT_LENGTH];
+				PHYRE_SNPRINTF(scoreStringP4, PHYRE_STATIC_ARRAY_SIZE(scoreStringP4), "Score: %.0f", pMan->getScore(i));
+				m_text[TEXT_SCORE_P4] = UIManager::GetInstance().AddScreenText(scoreStringP4[0], 0.90, 0.95, Vector3(1.8f, 2.0f, 0.0f), 1.0f);
+				break;
+			}
+		}//end of new/**/
 
 	return PApplication::initScene();
 }
@@ -411,6 +440,52 @@ PResult PhyreStarter::handleInputs()
 		//}
 	}
 */
+
+	//PTimeController neo;
+	//neo.getTime();
+	
+//	PHYRE_TRY(PTimeController::GlobalTick(elapsedGameTime));
+//	elapsedGameTime;
+//	timeLeft -= elapsedGameTime;
+
+	elapsedGameTime = PTimer::GetTime();//new
+
+	timeLeft -= elapsedGameTime/temp;//new
+	temp = temp + 1;//new
+	PChar distanceString[PD_MAX_DYNAMIC_TEXT_LENGTH];//new
+	PHYRE_SNPRINTF(distanceString, PHYRE_STATIC_ARRAY_SIZE(distanceString), "TimeLeft: %.0f", timeLeft);//new
+	m_text[TEXT_TIME] = UIManager::GetInstance().UpdateText(0, *distanceString);//new
+	//m_text[TEXT_TIME] = UIManager::GetInstance().AddScreenText(distanceString[0], 0.45, 0.15, Vector3(1.0f, 0.5f, 0.0f), 1.0f);
+/*	*/
+
+	//----------displaying score----------//new
+	for (int i = 0; i < 4; i++)
+	{
+		switch (i)
+		{
+		case 0:
+			PChar scoreStringP1[PD_MAX_DYNAMIC_TEXT_LENGTH];
+			PHYRE_SNPRINTF(scoreStringP1, PHYRE_STATIC_ARRAY_SIZE(scoreStringP1), "Score: %.0f", pMan->getScore(i));
+			m_text[TEXT_SCORE_P1] = UIManager::GetInstance().UpdateText(1, *scoreStringP1);
+			break;
+		case 1:
+			PChar scoreStringP2[PD_MAX_DYNAMIC_TEXT_LENGTH];
+			PHYRE_SNPRINTF(scoreStringP2, PHYRE_STATIC_ARRAY_SIZE(scoreStringP2), "Score: %.0f", pMan->getScore(i));
+			m_text[TEXT_SCORE_P2] = UIManager::GetInstance().UpdateText(2, *scoreStringP2);
+			break;
+		case 2:
+			PChar scoreStringP3[PD_MAX_DYNAMIC_TEXT_LENGTH];
+			PHYRE_SNPRINTF(scoreStringP3, PHYRE_STATIC_ARRAY_SIZE(scoreStringP3), "Score: %.0f", pMan->getScore(i));
+			m_text[TEXT_SCORE_P3] = UIManager::GetInstance().UpdateText(3, *scoreStringP3);
+			break;
+		case 3:
+			PChar scoreStringP4[PD_MAX_DYNAMIC_TEXT_LENGTH];
+			PHYRE_SNPRINTF(scoreStringP4, PHYRE_STATIC_ARRAY_SIZE(scoreStringP4), "Score: %.0f", pMan->getScore(i));
+			m_text[TEXT_SCORE_P4] = UIManager::GetInstance().UpdateText(4, *scoreStringP4);
+			break;
+		}
+	}/**/
+	//----------end of score----------//end of NEW
 	return PApplication::handleInputs();
 }
 PResult PhyreStarter::animate() 

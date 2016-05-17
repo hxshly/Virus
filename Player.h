@@ -16,8 +16,8 @@ public:
 	//Setter functions
 	void setVirusStatus(bool status) { isVirus = status; };
 
-	void incremenetScore()	{ score += incVal; };
-	void decrementScore()	{ score -= decVal; };
+	void incremenetScore()	{ score += incVal/60; };
+	void decrementScore()	{ score -= decVal/40; };
 
 	void setPosition(Vector3 newPos) { position = newPos; };
 	void setRotation(Vector3 newRot) { rotation = newRot; };
@@ -34,18 +34,35 @@ public:
 	void decYPos(float newY) { position.setY(position.getY() - newY); };
 	void decZPos(float newZ) { position.setZ(position.getZ() - newZ); };
 
+	void countdownInvuln()	{if (invuln > 0) {invuln -= 1; } };
+	void resetInvuln()	{ invuln = 180; };
+
+	void flipVirus()	{ isVirus = !isVirus; };
+
+	void changeMeshToPlayerMesh();
+	void changeMeshToVirusMesh();
+
 
 	//Getter functions
 	std::string getName()	{ return playerName; };
 	bool checkVirus()		{ return isVirus; };
-	int getScore()			{ return score; };
+	float getScore()			{ return score; };
 	int getPNumber()		{ return playerNumber; };
-	Vector3 getPosition()	{ return position; };
+	int getInvuln()			{ return invuln; };
 	float getXPos()			{ return position.getX(); };
 	float getYPos()			{ return position.getY(); };
 	float getZPos()			{ return position.getZ(); };
 	float getThePos(int pos);
+	float minX()			{ return (getXPos() - 50.0f); };
+	float maxX()			{ return (getXPos() + 50.0f); };
+	float minY()			{ return (getYPos() - 50.0f); };
+	float maxY()			{ return (getYPos() + 50.0f); };
+	float minZ()			{ return (getZPos() - 50.0f); };
+	float maxZ()			{ return (getZPos() + 50.0f); };
+
+	Vector3 getPosition()	{ return position; };
 	Vector3 getRotation()	{ return rotation; };
+	
 
 private:
 	//Fixed attributes
@@ -54,14 +71,17 @@ private:
 
 	//Mutable attributes
 	bool isVirus;
-	int score;
+	float score;
+	int invuln;
 	Vector3 position;
 	Vector3 rotation;
 
 	Phyre::PWorldMatrix* pWorldMat;
-	Phyre::PRendering::PMeshInstance* pMeshInstance;
+	Phyre::PWorldMatrix* pWorldMatVirus;
+	Phyre::PRendering::PMeshInstance* pMeshInstancePlayer;
+	Phyre::PRendering::PMeshInstance* pMeshInstanceVirus;
 
-	int incVal = 5;
-	int decVal = 5;
+
+	float incVal;
+	float decVal;
 };
-
