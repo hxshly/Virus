@@ -45,9 +45,10 @@ protected:
 	float frequencyPerSecond = 0;
 	float elapsedGameTime;
 	LONGLONG start;
-	int m_text[TEXT_TOTAL];
-	int timeLeft = 60;
+	float m_text[TEXT_TOTAL];
+	float timeLeft = 60;
 	PlayerManager* pMan;
+	int temp = 60; // new
 
 public:
 	PhyreStarter();

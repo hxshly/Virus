@@ -23,6 +23,7 @@ public:
 	void updatePlayers();
 	bool checkCollision(Player &player);
 	float getDistanceBetween(Vector3 vectorBetween);
+	float getScore(int pNumber);
 
 private:
 	
